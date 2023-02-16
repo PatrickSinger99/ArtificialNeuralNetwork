@@ -8,6 +8,19 @@ class MultiLayerPerceptron:
         self._num_inputs = num_inputs
         self._num_outputs = num_outputs
 
+        self._neurons = []
+
+        input_neurons = []
+        for i in range(num_inputs):
+            input_neurons.append(InputNeuron(f"input_neuron_{i+1}"))
+        self._neurons.append(input_neurons)
+
+        print(self._neurons)
+
+        for hidden_index in range(num_hidden_layers):
+            hidden_layer_neurons = []
+            for i in range(num_hidden_layer_neurons):
+                hidden_layer_neurons.append(HiddenNeuron(f"hidden_neuron_{hidden_index+1}_{i+1}", ))
 
 class Neuron(ABC):
     def __init__(self, name):
@@ -133,3 +146,5 @@ if __name__ == "__main__":
     print(h1.get_weights())
     print(h1.calc_activation_function(-2))
     print(h1)
+
+    MultiLayerPerceptron(5,3,1,1)

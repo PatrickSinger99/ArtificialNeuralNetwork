@@ -88,6 +88,7 @@ class Layer:
 class InputLayer:
     def __init__(self, num_neurons):
         self.neurons = [Neuron() for _ in range(num_neurons)]
+        self.weights = None
 
     def compile(self, _):
         pass
@@ -123,6 +124,18 @@ class MultilayerPerceptron:
         else:
             print("Model was already compiled!")
 
+    def get_all_weights(self):
+        all_weights = []
+        for layer in self.layers[1:]:
+            all_weights += [weight for weights in layer.weights for weight in weights]
+        return all_weights
+
+    def train(self, input_values, expected_output):
+        model_out = self(input_values)
+        cost = sum([(model_out[i]-expected_output[i])**2 for i in range(len(model_out))])  # SSE
+        all_weights = self.get_all_weights()
+        print(len(all_weights))
+
     def __call__(self, input_values):
         if self.compiled:
             for i, neuron in enumerate(self.layers[0].neurons):
@@ -152,12 +165,13 @@ class MultilayerPerceptron:
 
 if __name__ == "__main__":
 
-    mlp = MultilayerPerceptron(784)
+    mlp = MultilayerPerceptron(4)
+    mlp.add_layer(8, activation="sigmoid")
     mlp.add_layer(16, activation="sigmoid")
-    mlp.add_layer(16, activation="sigmoid")
-    mlp.add_layer(10)
+    mlp.add_layer(3)
     mlp.compile()
     print(mlp)
 
-    print(mlp([random.random() for _ in range(784)]))
+    # print(mlp([random.random() for _ in range(4)]))
+    print(mlp.train([random.random() for _ in range(4)], [0, 1, 0]))
 
